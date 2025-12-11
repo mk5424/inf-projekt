@@ -1,6 +1,26 @@
-﻿  main.cpp
+﻿  Game.cpp
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(8,31): warning C4305: "argument": obcięcie z "double" do "float"
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(9,29): warning C4305: "argument": obcięcie z "double" do "float"
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(57,43): warning C4305: "argument": obcięcie z "double" do "T"
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(57,43): warning C4305:         with
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(57,43): warning C4305:         [
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(57,43): warning C4305:             T=float
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp(57,43): warning C4305:         ]
+  main.cpp
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,51): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,51): warning C4244:         with
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,51): warning C4244:         [
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,51): warning C4244:             T=unsigned int
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,51): warning C4244:         ]
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,31): warning C4244: "argument": konwersja z "T" do "float", możliwa utrata danych
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,31): warning C4244:         with
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,31): warning C4244:         [
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,31): warning C4244:             T=unsigned int
+C:\Users\Michał\source\repos\sfml\sfml\main.cpp(20,31): warning C4244:         ]
+  pilka.cpp
+  stone.cpp
   Trwa generowanie kodu
-  2 of 181 functions ( 1.1%) were compiled, the rest were copied from previous compilation.
+  0 of 767 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu

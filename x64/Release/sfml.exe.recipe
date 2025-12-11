@@ -5,7 +5,11 @@
       <FullPath>C:\Users\Michał\source\repos\sfml\x64\Release\sfml.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\Michał\source\repos\sfml\sfml\arial (1).ttf</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>

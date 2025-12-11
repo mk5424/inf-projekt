@@ -1,83 +1,157 @@
-#include <SFML/Graphics.hpp>
-#include "paletka.h"
-#include "pilka.h"
-#include <iostream>
-#include "stone.h"
-#include <vector>
+#include "Game.h"
+#include "menu.h"
+#include "gameState.h"
 
+/** @brief funkcja glowna obsluguje petle gry i zdarzenia */
+int main()
+{
+    enum class GameState
+    {
+        Menu,
+        Playing,
+        Scores,
+        Exiting,
+        Stop,
+        Przegrana,
+        Playing2
+    };
 
-int main() {
-	const float WIDTH = 640.f;
-	const float HEIGHT = 480.f;
+    sf::RenderWindow window(sf::VideoMode({ 640, 480 }), "My window");
+    Menu menu(window.getSize().x, window.getSize().y);
+    Game game;
+    GameState currentState = GameState::Menu;
+    gameState stop;
 
-	const int ILOSC_KOLUMN = 6;
-	const int ILOSC_WIERSZY = 7;
-	const float ROZMIAR_BLOKU_Y = 25.f;
-	const float ROZMIAR_BLOKU_X = (WIDTH - (ILOSC_KOLUMN - 1) * 2.f) / ILOSC_KOLUMN;
+    sf::Clock clock;
 
-	const float PRZERWA = 2.f;
+    while (window.isOpen())
+    {
+        sf::Time dt = clock.restart();
 
-	std::vector<Stone> bloki;
+        while (const std::optional event = window.pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+                window.close();
 
-	for (int y = 0; y < ILOSC_WIERSZY; ++y)
-	{
-		for (int x = 0; x < ILOSC_KOLUMN; ++x)
-		{
-			float posX = x * (ROZMIAR_BLOKU_X + PRZERWA);
-			float posY = 50.f + y * (ROZMIAR_BLOKU_Y + PRZERWA);
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+            {
+                /** @brief obsluguje przesuniecie wskaznika menu w gore */
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Up)
+                {
+                    myDelay(250);
+                    menu.przesunG();
+                }
 
-			int L = (y < 1) ? 3 : (y < 3) ? 2 : 1;
+                /** @brief obsluguje przesuniecie wskaznika menu w dol */
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Down)
+                {
+                    myDelay(250);
+                    menu.przesunD();
+                }
 
-			bloki.emplace_back(sf::Vector2f(posX, posY), sf::Vector2f(ROZMIAR_BLOKU_X, ROZMIAR_BLOKU_Y), L);
-		}
-	}
+                /** @brief obsluguje zamkniecie gry */
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Escape)
+                {
+                    myDelay(250);
+                    currentState = GameState::Exiting;
+                }
 
-	sf::RenderWindow window(sf::VideoMode({ (unsigned)WIDTH, (unsigned)HEIGHT }), "Arkanoid"); 
-	window.setFramerateLimit(60);
+                /** @brief przelacza pauze */
+                if (keyPressed->scancode == sf::Keyboard::Scancode::P)
+                {
+                    myDelay(250);
 
-	paletka pal(320.f, 440.f, 8.f, 20.f, 200.f); // x,y,szer,wys, predkosc 
-	pilka pilka(320.f, 250.f, 8.f, 6.f, 8.f); // x,y,vx,vy,radius
+                    if (currentState == GameState::Stop)
+                        currentState = GameState::Playing;
+                    else if (currentState == GameState::Playing)
+                        currentState = GameState::Stop;
+                }
 
-	int licznikKlatek = 0;
+                /** @brief zapisuje aktualny stan gry do pliku */
+                if (keyPressed->scancode == sf::Keyboard::Scancode::F5)
+                {
+                    myDelay(250);
 
+                    stop.capture(
+                        game.getPaddle(),
+                        game.getBall(),
+                        game.getBlocks()
+                    );
 
-	while (window.isOpen()) {
+                    if (stop.saveToFile("zapis.txt"))
+                        std::cout << "Gra zapisana!\n";
+                    else
+                        std::cout << "Blad zapisu pliku!\n";
+                }
 
+                /** @brief obsluguje wybor opcji menu */
+                if (keyPressed->scancode == sf::Keyboard::Scancode::Enter)
+                {
+                    if (menu.getSelectedItem() == 0) currentState = GameState::Playing;
+                    if (menu.getSelectedItem() == 1) currentState = GameState::Scores;
+                    if (menu.getSelectedItem() == 2) currentState = GameState::Playing2;
+                    if (menu.getSelectedItem() == 3) currentState = GameState::Exiting;
+                }
+            }
+        }
 
-		pal.moveLeft();
-		pal.moveRight();
-		pal.clampToBounds(WIDTH);
-		pilka.move();
-		pilka.collideWalls(WIDTH, HEIGHT);
+        window.clear();
 
+        /** @brief rysuje menu glowne */
+        if (currentState == GameState::Menu)
+            menu.draw(window);
 
-		if (pilka.collideStone(bloki)) { 
-			std::cout << "HIT BLOCK\n"; 
-		}
+        else if (currentState == GameState::Przegrana) {
+            menu.drawKoniec(window);
+            game.m_gameOver = false;
+            window.display();
+            myDelay(1500);
+            currentState = GameState::Menu;
+        }
 
-		if (pilka.collidePaddle(pal)) {
-			std::cout << "HIT PADDLE\n";
-		}
+        /** @brief aktualizuje i wyswietla gre */
+        else if (currentState == GameState::Playing)
+        {
+            if (game.isGameOver()) {
+                currentState = GameState::Przegrana;
+                continue;
+            }
+            game.update(dt);
+            game.render(window);
+        }
 
-		if (pilka.getY() - pilka.getRadius() > HEIGHT) {
-			std::cout << "MISS! KONIEC GRY\n";
-			window.close();
-		}
+        /** @brief wczytuje zapis gry */
+        else if (currentState == GameState::Playing2) {
+            gameState loaded;
+            if (loaded.loadFromFile("zapis.txt"))
+            {
+                std::cout << "Gra wczytana!\n";
 
-		if (licznikKlatek % 60 == 0) {
-			std::cout << "x=" << pilka.getX() << " y=" << pilka.getY() << " vx=" << pilka.getVX() << " vy=" << pilka.getVY() << std::endl;
-		}
+                loaded.apply(
+                    game.getPaddle(),
+                    game.getBall(),
+                    game.getBlocks()
+                );
+            }
+            else
+            {
+                std::cout << "Blad odczytu pliku!\n";
+            }
+            currentState = GameState::Playing;
+        }
 
-		licznikKlatek++;
+        /** @brief zamyka aplikacje */
+        else if (currentState == GameState::Exiting)
+            window.close();
 
-		window.clear(sf::Color(20, 20, 30));
-		pal.draw(window);
-		pilka.draw(window);
-		for (const auto& b : bloki) {
-			b.draw(window);
-		}
-		window.display();
+        /** @brief renderuje gre w trybie pauzy */
+        else if (currentState == GameState::Stop) {
+            stop.capture(game.getPaddle(), game.getBall(), game.getBlocks());
+            game.render(window);
+        }
 
-	}
+        window.display();
+    }
 
+    return 0;
 }

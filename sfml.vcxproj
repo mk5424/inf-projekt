@@ -20,12 +20,25 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="paletka.cpp" />
+    <ClCompile Include="pilka.cpp" />
+    <ClCompile Include="stone.cpp" />
+    <ClCompile Include="menu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Nagłówek1.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="gameState.h" />
     <ClInclude Include="stone.h" />
     <ClInclude Include="pilka.h" />
     <ClInclude Include="paletka.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="arial (1).ttf">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+    </Font>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

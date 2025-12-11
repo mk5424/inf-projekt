@@ -1,1 +1,6 @@
 C:\Users\Michał\source\repos\sfml\sfml\main.cpp;C:\Users\Michał\source\repos\sfml\sfml\x64\Release\main.obj
+C:\Users\Michał\source\repos\sfml\sfml\Game.cpp;C:\Users\Michał\source\repos\sfml\sfml\x64\Release\Game.obj
+C:\Users\Michał\source\repos\sfml\sfml\paletka.cpp;C:\Users\Michał\source\repos\sfml\sfml\x64\Release\paletka.obj
+C:\Users\Michał\source\repos\sfml\sfml\pilka.cpp;C:\Users\Michał\source\repos\sfml\sfml\x64\Release\pilka.obj
+C:\Users\Michał\source\repos\sfml\sfml\stone.cpp;C:\Users\Michał\source\repos\sfml\sfml\x64\Release\stone.obj
+C:\Users\Michał\source\repos\sfml\sfml\menu.cpp;C:\Users\Michał\source\repos\sfml\sfml\x64\Release\menu.obj

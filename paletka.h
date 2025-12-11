@@ -1,76 +1,91 @@
 #pragma once
-#include<iostream>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
-class paletka {
-
+/**
+ * @brief klasa reprezentujaca paletke gracza
+ */
+class paletka
+{
 private:
+    /**
+     * @brief pozycja x paletki
+     */
+    float x;
 
-	float x;
-	float y;
-	float szerokosc;
-	float wysokosc;
-	float v;
+    /**
+     * @brief pozycja y paletki
+     */
+    float y;
 
-	sf::RectangleShape shape;
+    /**
+     * @brief szerokosc paletki
+     */
+    float szerokosc;
+
+    /**
+     * @brief wysokosc paletki
+     */
+    float wysokosc;
+
+    /**
+     * @brief predkosc ruchu paletki
+     */
+    float v;
+
+    /**
+     * @brief graficzna reprezentacja paletki jako prostokat
+     */
+    sf::RectangleShape shape;
 
 public:
+    /**
+     * @brief konstruktor ustawiajacy parametry paletki
+     * @param x_in pozycja x
+     * @param y_in pozycja y
+     * @param v_in predkosc
+     * @param h_in wysokosc
+     * @param w_in szerokosc
+     */
+    paletka(float x_in, float y_in, float v_in, float h_in, float w_in);
 
-	paletka(float x_in, float y_in, float v_in, float h_in, float w_in);
+    /**
+     * @brief przesuwa paletke w lewo
+     */
+    void moveLeft();
 
-	void moveLeft();
-	void moveRight();
-	void clampToBounds(float szerokoscPola);
-	void draw(sf::RenderTarget& target);
+    /**
+     * @brief przesuwa paletke w prawo
+     */
+    void moveRight();
 
-	float getX() const { return x; }
-	float getY() const { return y; }
-	float getSzerokosc() const { return szerokosc; }
-	float getWysokosc() const { return wysokosc; }
+    /**
+     * @brief ogranicza ruch paletki do szerokosci okna
+     * @param szerokoscPola maksymalna szerokosc pola gry
+     */
+    void clampToBounds(float szerokoscPola);
 
+    /**
+     * @brief rysuje paletke
+     * @param target obiekt renderujacy
+     */
+    void draw(sf::RenderTarget& target);
+
+    /**
+     * @brief ustawia pozycje paletki
+     */
+    void setPosition(const sf::Vector2f& pos)
+    {
+        shape.setPosition(pos);
+    }
+
+    float getX() const { return x; }
+    float getY() const { return y; }
+    float getSzerokosc() const { return szerokosc; }
+    float getWysokosc() const { return wysokosc; }
+
+    /**
+     * @brief zwraca aktualna pozycje paletki jako wektor
+     */
+    sf::Vector2f getPosition() const { return sf::Vector2f(x, y); }
 };
-
-paletka::paletka(float x_in, float y_in, float v_in, float h_in, float w_in) {
-
-	x = x_in;
-	y = y_in;
-	v = v_in;
-	szerokosc = w_in;
-	wysokosc = h_in;
-
-	shape.setSize({ szerokosc, wysokosc });
-	shape.setOrigin({ szerokosc / 2.f, wysokosc / 2.f });
-	shape.setPosition({ x, y });
-	shape.setFillColor(sf::Color::Blue);
-
-
-}
-
-void paletka::moveLeft() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {
-		x -= v;
-		shape.setPosition({ x, y });
-	}
-}
-
-void paletka::moveRight() {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)) {
-		x += v;
-		shape.setPosition({ x, y });
-	}
-}
-
-void paletka::clampToBounds(float szerokoscPola) {
-	if (x - szerokosc/2.f <= 0.f) {
-		x = szerokosc / 2.f;
-		shape.setPosition({ x,y });
-	}
-	if (x + szerokosc / 2.f >= szerokoscPola) {
-		x = szerokoscPola - szerokosc / 2.f;
-		shape.setPosition({ x,y });
-	}
-
-}
-void paletka::draw(sf::RenderTarget& target) {
-	target.draw(shape);
-}
